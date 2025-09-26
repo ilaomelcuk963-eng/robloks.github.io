@@ -1,12 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>robloks</title>
+    <title>Roblox Комментарии</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #d32f2f;
+        }
+        .comment-form {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            font-size: 14px;
+        }
+        button {
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b71c1c;
+        }
+        .comments-section {
+            max-width: 600px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        .comment .username {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .comment .text {
+            margin-top: 5px;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Roblox</h1>
-    <p>hello</p>
+
+    <h1>Roblox - Оставьте свой комментарий</h1>
+
+    <div class="comment-form">
+        <label for="username">Ваше имя:</label>
+        <input type="text" id="username" placeholder="Введите имя" maxlength="30">
+
+        <label for="comment">Комментарий:</label>
+        <textarea id="comment" rows="4" placeholder="Напишите ваш комментарий..." maxlength="300"></textarea>
+
+        <button id="submitBtn">Отправить</button>
+    </div>
+
+    <h2>Комментарии:</h2>
+    <div class="comments-section" id="commentsSection">
+        <!-- Здесь будут отображаться комментарии -->
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Roblox Comments Site
+    </div>
+
+    <script>
+        const submitBtn = document.getElementById('submitBtn');
+        const commentsSection = document.getElementById('commentsSection');
+        const usernameInput = document.getElementById('username');
+        const commentInput = document.getElementById('comment');
+
+        submitBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const comment = commentInput.value.trim();
+
+            if (!username) {
+                alert('Пожалуйста, введите ваше имя.');
+                return;
+            }
+
+            if (!comment) {
+                alert('Пожалуйста, напишите комментарий.');
+                return;
+            }
+
+            // Создаём новый блок комментария
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('comment');
+
+            const usernameElem = document.createElement('div');
+            usernameElem.classList.add('username');
+            usernameElem.textContent = username;
+
+            const textElem = document.createElement('div');
+            textElem.classList.add('text');
+            // Желаемая безопасность — экранируем текст с помощью создания текста (записать как textContent)
+            textElem.textContent = comment;
+
+            commentDiv.appendChild(usernameElem);
+            commentDiv.appendChild(textElem);
+
+            // Добавляем комментарий
+            commentsSection.appendChild(commentDiv);
+
+            // Очищаем поля формы
+            usernameInput.value = '';
+            commentInput.value = '';
+
+            // Прокручиваем вниз, чтобы показать новый комментарий
+            commentsSection.scrollTop = commentsSection.scrollHeight;
+        });
+    </script>
+
 </body>
 </html>
