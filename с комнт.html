@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Roblox — Оставьте комментарий</title>
+<style>
+/* (стили остаются такие же, что я ранее предложил, сохраняйте их) */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ff5858 0%, #f09819 100%);
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+h1 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    text-align: center;
+    user-select: none;
+}
+.container {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 30px 25px 40px;
+    display: flex;
+    flex-direction: column;
+}
+.game-info {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 30px;
+}
+h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #d32f2f;
+    font-weight: 700;
+}
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #666;
+}
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+    outline-offset: 2px;
+}
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #d32f2f;
+    outline: none;
+}
+/* Кнопка по центру и крупнее */
+button {
+    background-color: #d32f2f;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 16px 25px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    align-self: center;
+    min-width: 160px;
+    box-shadow: 0 6px 15px rgba(211,47,47,0.5);
+    transition: background-color 0.25s ease;
+    user-select: none;
+}
+button:hover,
+button:focus {
+    background-color: #a52727;
+    outline: none;
+}
+.comments-section {
+    margin-top: 40px;
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+.comment {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+.comment:last-child {
+    border-bottom: none;
+}
+.comment .username {
+    color: #d32f2f;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.comment .text {
+    color: #555;
+    white-space: pre-wrap;
+}
+.footer {
+    margin: 50px 0 10px;
+    font-size: 13px;
+    color: #eee;
+    text-align: center;
+    user-select: none;
+}
+/* Адаптив */
+@media (max-width: 480px) {
+    .container {
+        padding: 25px 20px 35px;
+        border-radius: 12px;
+    }
+    button {
+        width: 100%;
+        min-width: unset;
+    }
+    .game-info {
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body>
+<h1>Roblox — Оставьте комментарий</h1>
+
+<div class="container">
+    <div class="game-info">
+        <h2>Что такое Roblox?</h2>
+        <p>
+            Roblox — это онлайн-платформа для игр и разработки пользовательского контента, позволяющая миллионам игроков по всему миру создавать, делиться и играть в уникальные игры и виртуальные миры.
+        </p>
+        <p>
+            Здесь каждый может стать разработчиком: с помощью Roblox Studio создавайте свои собственные игры, приключения и симуляторы. Платформа объединяет творческих людей и геймеров, открывая неограниченные возможности для творчества и развлечений.
+        </p>
+        <p>
+            Помимо разнообразных игр, Roblox предлагает социальные функции — чаты, группы, обмен подарками и торговлю виртуальными предметами, в том числе с использованием внутренней валюты Robux.
+        </p>
+        <p>
+            Благодаря активному сообществу и регулярным обновлениям Roblox остаётся популярной и безопасной площадкой для всех возрастов.
+        </p>
+    </div>
+
+    <label for="username">Ваше имя</label>
+    <input type="text" id="username" placeholder="Введите ваше имя" maxlength="30" autocomplete="off" autocapitalize="words" />
+
+    <label for="comment">Комментарий</label>
+    <textarea id="comment" placeholder="Напишите ваш комментарий" maxlength="300"></textarea>
+
+    <button id="submitBtn">Отправить</button>
+
+    <div class="comments-section" id="commentsSection" aria-live="polite" aria-label="Комментарии пользователей"></div>
+</div>
+
+<div class="footer">
+    &copy; 2024 Roblox Comments Site
+</div>
+
+<script>
+// Получаем элементы
+const submitBtn = document.getElementById('submitBtn');
+const commentsSection = document.getElementById('commentsSection');
+const usernameInput = document.getElementById('username');
+const commentInput = document.getElementById('comment');
+
+// Инициируем массив комментариев из localStorage или создаем новый
+let comments = JSON.parse(localStorage.getItem('comments')) || [];
+
+// Функция отображения комментариев
+function renderComments() {
+    commentsSection.innerHTML = '';
+    comments.forEach(c => {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment';
+
+        const usernameElem = document.createElement('div');
+        usernameElem.className = 'username';
+        usernameElem.textContent = c.username;
+
+        const textElem = document.createElement('div');
+        textElem.className = 'text';
+        textElem.textContent = c.comment;
+
+        commentDiv.appendChild(usernameElem);
+        commentDiv.appendChild(textElem);
+        commentsSection.appendChild(commentDiv);
+    });
+}
+
+// Отрисуем сразу при загрузке
+renderComments();
+
+// Обработчик кнопки
+submitBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const comment = commentInput.value.trim();
+
+    // Проверка
+    if (!username) {
+        alert('Пожалуйста, введите ваше имя.');
+        usernameInput.focus();
+        return;
+    }
+    if (!comment) {
+        alert('Пожалуйста, напишите комментарий.');
+        commentInput.focus();
+        return;
+    }
+
+    // Создаём комментарий
+    const newComment = { username, comment };
+    comments.push(newComment);
+    // Обновляем localStorage
+    localStorage.setItem('comments', JSON.stringify(comments));
+    // Обновляем отображение
+    renderComments();
+
+    // Очистка полей
+    usernameInput.value = '';
+    commentInput.value = '';
+
+    // Прокрутка вниз
+    commentsSection.scrollTop = commentsSection.scrollHeight;
+});
+
+// Можно добавить нажатие по Enter для отправки
+commentInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        submitBtn.click();
+    }
+});
+</script>
+</body>
+</html>
