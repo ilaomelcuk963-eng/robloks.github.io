@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Чемпион</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f0e68c, #ff7f50); /* красивый фон */
+  overflow-x: hidden;
+}
+
+/* Анимационные боковые границы */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700 inset; }
+  50% { box-shadow: 0 0 20px #ffa500, 0 0 40px #ffa500 inset; }
+}
+
+.left-border, .right-border {
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 10px;
+  z-index: 999;
+  animation: borderGlow 2s infinite;
+}
+.left-border {
+  left: 0;
+  background: linear-gradient(to bottom, #ffd700, #ffa500);
+}
+.right-border {
+  right: 0;
+  background: linear-gradient(to bottom, #ffd700, #ffa500);
+}
+
+/* Основной контейнер */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Заголовок */
+h1 {
+  text-align: center;
+  font-size: 4em;
+  margin-top: 20px;
+  color: #fff;
+  text-shadow: 2px 2px 4px #000;
+}
+
+/* Верхняя рамка */
+.top-box {
+  border: 4px solid #fff;
+  padding: 20px;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 15px;
+}
+
+/* Четыре рамки снизу */
+.bottom-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+.bottom-box {
+  border: 3px solid #fff;
+  padding: 15px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  height: 150px;
+}
+
+/* Область для благодарности */
+.thankyou {
+  margin-top: 30px;
+  padding: 15px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  font-size: 1.2em;
+  color: #fff;
+}
+
+/* Комментарии */
+.comments-section {
+  margin-top: 30px;
+}
+.comments-section textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  resize: vertical;
+  border-radius: 8px;
+  border: none;
+  font-family: Arial, sans-serif;
+}
+
+/* Мини-игра "Нарисуй Милану" */
+.game-section {
+  margin-top: 40px;
+}
+.game-section h3 {
+  text-align: center;
+  color: #fff;
+}
+canvas {
+  display: block;
+  margin: 10px auto;
+  border: 2px solid #fff;
+  background: #fff;
+}
+.color-picker {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.color-btn {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<!-- Боковые анимационные границы -->
+<div class="left-border"></div>
+<div class="right-border"></div>
+
+<!-- Основной контейнер -->
+<div class="container">
+  <!-- Большой заголовок -->
+  <h1>Чемпион</h1>
+
+  <!-- Верхняя рамка -->
+  <div class="top-box">
+    <h2 style="text-align:center; color:#fff;">мое фото</h2>
+    <img src="./ogin.php/изображение_viber_2025-09-29_11-57-49-860.jpg" alt="" width="400px">
+  </div>
+
+  <!-- 4 рамки снизу -->
+  <div class="bottom-boxes">
+    <div class="bottom-box">Рамка 1</div>
+    <div class="bottom-box">Рамка 2</div>
+    <div class="bottom-box">Рамка 3</div>
+    <div class="bottom-box">Рамка 4</div>
+  </div>
+
+  <!-- Место для благодарности -->
+  <div class="thankyou" id="thankYouSection">
+    Благодарность тренеру Елене Владимеровне Бычук!
+  </div>
+
+  <!-- Место для комментариев -->
+  <div class="comments-section">
+    <h3 style="color:#fff;">Ваш отзыв, напрямую Омельчуку илье :):</h3>
+    <textarea placeholder="Введите ваш комментарий..."></textarea>
+  </div>
+
+  <!-- Мини-игра: Нарисуй Милану -->
+  <div class="game-section">
+    <h3>Нарисуй Милану</h3>
+    <canvas id="drawingCanvas" width="300" height="300"></canvas>
+    <div class="color-picker">
+      <button class="color-btn" style="background:#000;" data-color="#000"></button>
+      <button class="color-btn" style="background:#f00;" data-color="#f00"></button>
+      <button class="color-btn" style="background:#0f0;" data-color="#0f0"></button>
+      <button class="color-btn" style="background:#00f;" data-color="#00f"></button>
+      <button class="color-btn" style="background:#ff0;" data-color="#ff0"></button>
+      <button class="color-btn" style="background:#f0f;" data-color="#f0f"></button>
+    </div>
+    <button id="clearBtn" style="display:block;margin:10px auto;padding:5px 10px;">Очистить</button>
+    <h4 style="text-align:center; color:#fff;">Можно загрузить фото</h4>
+    <input type="file" accept="image/*" id="uploadImage" style="display:block;margin:0 auto;">
+  </div>
+</div>
+
+<!-- Скрипты для мини-игры -->
+<script>
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let currentColor = '#000';
+
+document.querySelectorAll('.color-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentColor = btn.dataset.color;
+  });
+});
+canvas.addEventListener('mousedown', () => { drawing = true; });
+canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+canvas.addEventListener('mousemove', (e) => {
+  if (!drawing) return;
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = currentColor;
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+// Загрузка фото
+document.getElementById('uploadImage').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+    img.src = event.target.result;
+  }
+  reader.readAsDataURL(file);
+});
+</script>
+
+</body>
+</html>
